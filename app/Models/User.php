@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
   use HasFactory;
-  use Notifiable;
 
   protected $fillable = [
     'name',
