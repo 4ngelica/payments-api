@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     use HasFactory;
-    protected $fillable = ['payer_id', 'payee_id', 'value', 'status'];
+    protected $fillable = [
+        'payer_id',
+        'payee_id',
+        'value',
+        'status'
+    ];
 
     public function rules() {
       return [
@@ -22,5 +27,9 @@ class Transaction extends Model
       return [
         'required' => 'The :attribute field is required'
       ];
+    }
+
+    public function payer() {
+        return $this->belongsTo('App\Models\User');
     }
 }
