@@ -12,8 +12,19 @@ class TransactionController extends Controller
       $this->transaction = $transaction;
     }
 
-    public function store(Request $request){
-      return response()->json($request->all());
+    public function store(Request $request) {
+
+        $transacao = $this->transaction->create($request->validate($this->transaction->rules(), $this->transaction->feedback()));
+        return response()->json($transacao);
     }
 
+    public function index() {
+        $transaction = $this->transaction->all();
+        return response()->json($transaction);
+    }
+
+    public function show($id) {
+        $transaction = $this->transaction->find($id);
+        return response()->json($transaction);
+    }
 }
