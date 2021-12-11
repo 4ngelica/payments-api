@@ -16,4 +16,8 @@ class User extends Model
     'identity',
     'type'
   ];
+
+  public function transactions() {
+      return $this->hasMany('App\Models\Transaction');
+  }
 }
