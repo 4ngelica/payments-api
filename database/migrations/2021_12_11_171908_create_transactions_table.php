@@ -15,15 +15,14 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->decimal('value', $scale = 2);
+            $table->float('value');
             $table->unsignedBigInteger('payer_id');
             $table->integer('payee_id');
-            $table->enum('status', ['pending', 'completed', 'canceled']);
+            $table->enum('status', ['pending', 'completed', 'canceled'])->default('pending');
             $table->timestamps();
 
             //foreign key (constraints)
             $table->foreign('payer_id')->references('id')->on('users');
-            $table->unique('payer_id');
         });
     }
 
