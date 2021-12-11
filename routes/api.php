@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,5 +17,5 @@ use App\Http\Controllers\TransactionController;
 */
 
 Route::get('transaction', [TransactionController::class, 'index'])->name('index.transaction');
-Route::post('transaction/{id}', [TransactionController::class, 'show'])->name('show.transaction');
+Route::get('transaction/{id}', [TransactionController::class, 'show'])->name('show.transaction');
 Route::post('transaction', [TransactionController::class, 'store'])->name('store.transaction');
