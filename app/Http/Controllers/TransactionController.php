@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+use App\Models\User;
 
 class TransactionController extends Controller
 {
@@ -14,8 +15,14 @@ class TransactionController extends Controller
 
     public function store(Request $request) {
 
-        $transacao = $this->transaction->create($request->validate($this->transaction->rules(), $this->transaction->feedback()));
-        return response()->json($transacao);
+        $pendingTransaction = $request->validate($this->transaction->rules(), $this->transaction->feedback());
+
+        if($this->transaction->authorizePayerType($request->payer_id)){
+            $this->transaction->create($pendingTransaction);
+            return response()->json($pendingTransaction);
+        }
+
+        return response()->json(['Error' => 'Non authorized']);
     }
 
     public function index() {
@@ -27,4 +34,9 @@ class TransactionController extends Controller
         $transaction = $this->transaction->find($id);
         return response()->json($transaction);
     }
+
+    // public function handleRequest($payer, $payee) {
+    //
+    //   return response()->json('blz');
+    // }
 }
