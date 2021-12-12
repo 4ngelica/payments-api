@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
-
+use Exception;
 
 class UserController extends Controller
 {
@@ -32,12 +32,20 @@ class UserController extends Controller
     * Responds to a GET request into
     * /user/{id} endpoint with the respective
     * user and its wallet
-    *
+    * @param Int $id
     * @return JsonResponse
     */
-    public function show($id) : JsonResponse
+    public function show(int $id) : JsonResponse
     {
-        $user = $this->user->with('wallet')->find($id);
-        return response()->json($user);
+        try{
+            $user = $this->user->with('wallet')->findOrFail($id);
+            return response()->json($user);
+
+        }catch (Exception $e) {
+
+            return response()->json(
+                ['error' => 'The requested resource does not exist.'],
+                JsonResponse::HTTP_NOT_FOUND);
+        }
     }
 }
