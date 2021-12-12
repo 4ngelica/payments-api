@@ -42,7 +42,6 @@ class Transaction extends Model
     public function authorizePayerType($payer) {
 
         $payerType = User::where('id', $payer)->first()->getAttribute('type');
-
         if($payerType == 1){
             return false;
         }
@@ -58,22 +57,30 @@ class Transaction extends Model
         return false;
     }
 
-    public function decrementBalance($payer, $value) {
+    public function beginTransaction($payer, $payee, $value) {
         $payerBalance = User::with('wallet')->where('id', $payer)->first()->getRelation('wallet');
         $payerBalance->setAttribute( 'balance', $payerBalance->getAttribute('balance') - floatval($value))->save();
+
+        $payeeBalance = User::with('wallet')->where('id', $payee)->first()->getRelation('wallet');
+        $payeeBalance->setAttribute( 'balance', $payeeBalance->getAttribute('balance') + floatval($value))->save();
     }
 
-    public function authorizeExternalService() {
+    public function authorizeExternalService($pendingTransaction) {
 
         $response = Http::get(self::URL);
-        if($response->ok()){
+        if(!($response->ok())){
+            $pendingTransaction->setAttribute( 'status', 'completed')->save();
             return true;
         }
+        $pendingTransaction->setAttribute( 'status', 'canceled')->save();
         return false;
     }
 
-    public function revertTransaction($payer, $value){
+    public function revertTransaction($payer, $payee, $value){
         $payerBalance = User::with('wallet')->where('id', $payer)->first()->getRelation('wallet');
         $payerBalance->setAttribute( 'balance', $payerBalance->getAttribute('balance') + floatval($value))->save();
+
+        $payeeBalance = User::with('wallet')->where('id', $payee)->first()->getRelation('wallet');
+        $payeeBalance->setAttribute( 'balance', $payeeBalance->getAttribute('balance') - floatval($value))->save();
     }
 }
