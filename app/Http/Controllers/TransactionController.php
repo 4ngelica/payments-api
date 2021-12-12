@@ -17,14 +17,14 @@ class TransactionController extends Controller
     public function store(Request $request) {
         $pendingTransaction = $request->validate($this->transaction->rules(), $this->transaction->feedback());
         if($this->transaction->authorizePayerType($request->payer_id)){
-            $this->transaction->create($pendingTransaction);
+            $pendingTransaction = $this->transaction->create($pendingTransaction);
 
-            if($this->transaction->authorizeBalance($request->payer_id,$request->value)){
-                $this->transaction->decrementBalance($request->payer_id, $request->value);
-                    if($this->transaction->authorizeExternalService()){
+            if($this->transaction->authorizeBalance($request->payer_id, $request->value)){
+                $this->transaction->beginTransaction($request->payer_id, $request->payee_id, $request->value);
+                    if($this->transaction->authorizeExternalService($pendingTransaction)){
                         return response()->json(['ok' => 'Successful operation']);
                     }else{
-                        $this->transaction->revertTransaction($request->payer_id, $request->value);
+                        $this->transaction->revertTransaction($request->payer_id, $request->payee_id, $request->value);
                         return response()->json(['Error' => 'Non authorized by external service']);
                     }
             }
