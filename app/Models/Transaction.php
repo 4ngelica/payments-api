@@ -38,11 +38,24 @@ class Transaction extends Model
     public function authorizePayerType($payer) {
 
         $payerType = User::where('id', $payer)->first()->getAttribute('type');
-        
+
         if($payerType == 1){
             return false;
         }
-
         return true;
+    }
+
+    public function authorizeBalance($payer, $value) {
+
+        $payerBalance = User::with('wallet')->where('id', $payer)->first()->getRelation('wallet')->getAttribute('balance');
+        if($payerBalance >= $value ){
+            return true;
+        }
+        return false;
+    }
+
+    public function decrementBalance($payer, $value) {
+        $payerBalance = User::with('wallet')->where('id', $payer)->first()->getRelation('wallet');
+        $payerBalance->setAttribute( 'balance', $payerBalance->getAttribute('balance') - floatval($value))->save();
     }
 }
