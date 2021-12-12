@@ -14,14 +14,15 @@ class TransactionController extends Controller
     }
 
     public function store(Request $request) {
-
         $pendingTransaction = $request->validate($this->transaction->rules(), $this->transaction->feedback());
-
         if($this->transaction->authorizePayerType($request->payer_id)){
             $this->transaction->create($pendingTransaction);
-            return response()->json($pendingTransaction);
-        }
 
+            if($this->transaction->authorizeBalance($request->payer_id,$request->value)){
+                $this->transaction->decrementBalance($request->payer_id, $request->value);
+                return response()->json($pendingTransaction);
+            }
+        }
         return response()->json(['Error' => 'Non authorized']);
     }
 
