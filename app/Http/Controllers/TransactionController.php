@@ -79,18 +79,18 @@ class TransactionController extends Controller
                 }else {
                     $this->transaction->revertTransaction($payerId, $payeeId, $value);
                     return response()->json(
-                        ['Error' => 'Non authorized by external service'],
+                        ['error' => 'Non authorized by external service'],
                         JsonResponse::HTTP_UNPROCESSABLE_ENTITY
                     );
                 }
             }
             return response()->json(
-                ['Error' => 'This user does not have enough ballance to make this transaction'],
+                ['error' => 'This user does not have enough ballance to make this transaction'],
                 JsonResponse::HTTP_UNPROCESSABLE_ENTITY
             );
         }
         return response()->json(
-            ['Error' => 'This user cannot make transactions'],
+            ['error' => 'This user cannot make transactions'],
             JsonResponse::HTTP_UNPROCESSABLE_ENTITY
         );
     }
