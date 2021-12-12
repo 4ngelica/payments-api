@@ -35,9 +35,4 @@ class TransactionController extends Controller
         $transaction = $this->transaction->find($id);
         return response()->json($transaction);
     }
-
-    // public function handleRequest($payer, $payee) {
-    //
-    //   return response()->json('blz');
-    // }
 }
