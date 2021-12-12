@@ -4,11 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Http;
+
 
 use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
+    const URL = 'https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6';
+
     use HasFactory;
     protected $fillable = [
         'payer_id',
@@ -57,5 +61,19 @@ class Transaction extends Model
     public function decrementBalance($payer, $value) {
         $payerBalance = User::with('wallet')->where('id', $payer)->first()->getRelation('wallet');
         $payerBalance->setAttribute( 'balance', $payerBalance->getAttribute('balance') - floatval($value))->save();
+    }
+
+    public function authorizeExternalService() {
+
+        $response = Http::get(self::URL);
+        if($response->ok()){
+            return true;
+        }
+        return false;
+    }
+
+    public function revertTransaction($payer, $value){
+        $payerBalance = User::with('wallet')->where('id', $payer)->first()->getRelation('wallet');
+        $payerBalance->setAttribute( 'balance', $payerBalance->getAttribute('balance') + floatval($value))->save();
     }
 }
