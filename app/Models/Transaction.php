@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Arr;
 
 
 use Illuminate\Database\Eloquent\Model;
@@ -68,10 +69,14 @@ class Transaction extends Model
     public function authorizeExternalService($pendingTransaction) {
 
         $response = Http::get(self::URL);
-        if(!($response->ok())){
+        $response = collect(json_decode($response, true));
+        $serviceResponse = Arr::get($response, 'message');
+
+        if($serviceResponse == 'Autorizado'){
             $pendingTransaction->setAttribute( 'status', 'completed')->save();
             return true;
         }
+
         $pendingTransaction->setAttribute( 'status', 'canceled')->save();
         return false;
     }
