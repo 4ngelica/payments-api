@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+
 use App\Models\User;
 
 class TransactionController extends Controller
@@ -20,7 +21,12 @@ class TransactionController extends Controller
 
             if($this->transaction->authorizeBalance($request->payer_id,$request->value)){
                 $this->transaction->decrementBalance($request->payer_id, $request->value);
-                return response()->json($pendingTransaction);
+                    if($this->transaction->authorizeExternalService()){
+                        return response()->json(['ok' => 'Successful operation']);
+                    }else{
+                        $this->transaction->revertTransaction($request->payer_id, $request->value);
+                        return response()->json(['Error' => 'Non authorized by external service']);
+                    }
             }
         }
         return response()->json(['Error' => 'Non authorized']);
