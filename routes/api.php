@@ -19,3 +19,6 @@ use App\Http\Controllers\UserController;
 Route::get('transaction', [TransactionController::class, 'index'])->name('index.transaction');
 Route::get('transaction/{id}', [TransactionController::class, 'show'])->name('show.transaction');
 Route::post('transaction', [TransactionController::class, 'store'])->name('store.transaction');
+
+Route::get('user', [UserController::class, 'index'])->name('index.user');
+Route::get('user/{id}', [UserController::class, 'show'])->name('show.user');
