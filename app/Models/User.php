@@ -18,6 +18,10 @@ class User extends Model
   ];
 
   public function transactions() {
-      return $this->hasMany('App\Models\Transaction');
+      return $this->hasMany('App\Models\Transaction', 'foreign_key', 'payer_id');
+  }
+
+  public function wallet() {
+      return $this->hasOne('App\Models\Wallet');
   }
 }
