@@ -28,13 +28,13 @@ Obs: é necessário acessar via http devido a uma <a href="https://github.com/Da
 
 Para o design da solução da transação, foi feito um gráfico de fluxo:
 
-<p align="center"><img width="80%" src="https://raw.githubusercontent.com/4ngelica/payments-api/master/public/docs/Flow.png"></p>
+<p align="center"><img width="100%" src="https://raw.githubusercontent.com/4ngelica/payments-api/master/public/docs/Flow.png?token=ALNOMQLSOFLIZUVYUGPFYWDBYDBUM"></p>
 
 ### Modelagem de Dados
 
 As três entidades relacionais definidas são Carteira (Wallet), Usuário (User) e Transação (Transaction). Usuário e carteira apresentam uma relação de 1:1 e usuário/transação apresentam uma relação de 1:N. Quando um novo registro de usuário é gerado via seeder, uma carteira é associada a esse usuário, carregando como chave estrangeira a user_id.
 
-<p align="center"><img width="80%" src="https://raw.githubusercontent.com/4ngelica/payments-api/master/public/docs/Flow.PNG"></p>
+<p align="center"><img width="80%" src="https://raw.githubusercontent.com/4ngelica/payments-api/master/public/docs/db.PNG?token=ALNOMQLOMJE4OPCQ44VSFW3BYDBXQ"></p>
 
 ## :pushpin: Instalação
 
