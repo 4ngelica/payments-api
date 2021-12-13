@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Transaction;
 use App\Models\User;
+use Exception;
 
 class TransactionController extends Controller
 {
@@ -40,8 +41,16 @@ class TransactionController extends Controller
     */
     public function show($id): JsonResponse
     {
-        $transaction = $this->transaction->find($id);
-        return response()->json($transaction);
+        try{
+            $transaction = $this->transaction->findOrFail($id);
+            return response()->json($transaction);
+
+        }catch(Exception $e) {
+
+            return response()->json(
+                ['error' => 'The requested resource does not exist.'],
+                JsonResponse::HTTP_NOT_FOUND);
+        }
     }
 
     /**
