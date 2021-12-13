@@ -32,8 +32,8 @@ class UserController extends Controller
     * Responds to a GET request into
     * /user/{id} endpoint with the respective
     * user and its wallet
-    * @param Int $id
     * @return JsonResponse
+    * @param Int $id
     */
     public function show(int $id) : JsonResponse
     {
