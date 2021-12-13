@@ -15,7 +15,7 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->float('value');
+            $table->decimal('value', 6, 2, true);
             $table->unsignedBigInteger('payer_id');
             $table->integer('payee_id');
             $table->enum('status', ['pending', 'completed', 'canceled'])->default('pending');
