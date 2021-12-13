@@ -1,0 +1,140 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Payments API",
+        "description": "RestAPI based on a simplified payment system between users.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api/"
+        }
+    ],
+    "paths": {
+        "/user": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Displays the users with their wallets info",
+                "description": "This endpoint returns a json with all users and their wallets.",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation."
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Displays a user by his id",
+                "description": "This endpoint returns a json with a single user and his wallet.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation."
+                    },
+                    "404": {
+                        "description": "The requested resource does not exist."
+                    }
+                }
+            }
+        },
+        "/transaction/{id}": {
+            "get": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Displays a transaction by its id",
+                "description": "This endpoint returns a json with a single transaction register.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Transaction to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation."
+                    },
+                    "404": {
+                        "description": "The requested resource does not exist."
+                    }
+                }
+            }
+        },
+        "/transaction": {
+            "get": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Displays all transactions made",
+                "description": "This endpoint returns a json with all the transactions made.",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Register a new transaction",
+                "description": "This endpoint registers a transaction from a user to another.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "payer_id": {
+                                        "description": "The user who is sending the transaction",
+                                        "type": "integer"
+                                    },
+                                    "payee_id": {
+                                        "description": "The user who is going to receive the transaction",
+                                        "type": "integer"
+                                    },
+                                    "value": {
+                                        "description": "The value of the transaction",
+                                        "type": "float"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation."
+                    },
+                    "422": {
+                        "description": "Unable to process payment: Low card balance | This type of user cannot make transactions | Non authorized by external service | The given data was invalid",
+                }
+            }
+        },
+    },
+    "security": [
+        []
+    ]
+}}
