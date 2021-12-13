@@ -70,7 +70,6 @@ class Transaction extends Model
     {
         $payerType = User::where('id', $payerId)->first()->getAttribute('type');
         if($payerType == 1){
-            $errors = ['teste'];
             return false;
         }
         return true;
@@ -83,12 +82,13 @@ class Transaction extends Model
     *
     * @return bool
     */
-    public function authorizeBalance($payerId, $value) : bool
+    public function authorizeBalance($payerId, $value, $pendingTransaction) : bool
     {
         $payerBalance = User::with('wallet')->where('id', $payerId)->first()->getRelation('wallet')->getAttribute('balance');
         if($payerBalance >= $value ){
             return true;
         }
+        $pendingTransaction->setAttribute( 'status', 'canceled')->save();
         return false;
     }
 
