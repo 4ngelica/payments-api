@@ -1,66 +1,57 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+<h3 align="center">Payments API</h3>
 
 <p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+   API Rest baseada em uma simulação de carteira digital para realização de transações financeiras entre usuários.
 </p>
 
-## About Laravel
+## :pushpin: Sobre
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Esse projeto compreende um sistema de pagamentos entre usuários que podem ser do tipo pessoa física (0) ou pessoa jurídica (1). Cada usuário possui uma carteira que é criada no momento em que o usuário é registrado no banco, via seeder. Além disso, é possível realizar transações desde que sejam atendidas as seguintes condições:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Apenas usuários do tipo pessoa física (0) podem realizar transferências;
+- É necessário checar o saldo da carteira para habilitar a transação;
+- Uma vez validado o saldo, é necessário obter a confirmação de um serviço externo para aprovação da transação;
+- As transações podem ser revertidas em caso de inconsistência.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## :pushpin: Tecnologias
+- PHP 7.4
+- Laravel 8
+- Docker
 
-## Learning Laravel
+## :pushpin: Documentação
+A documentação da API foi construída através da ferramenta Swagger e o deploy do ambiente de testes foi feito no Heroku.
+Acesse a documentação <b><a href="http://payments-api-challenge.herokuapp.com/api/docs">aqui</a></b>.<br>
+Obs: é necessário acessar via http devido a uma <a href="https://github.com/DarkaOnLine/L5-Swagger/issues/320">issue</a> do L5-swagger.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## :pushpin: Modelagem do problema
+### Gráfico de fluxo
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Para o design da solução da transação, foi feito um gráfico de fluxo:
 
-## Laravel Sponsors
+<p align="center"><img width="80%" src="https://raw.githubusercontent.com/4ngelica/payments-api/master/public/docs/Flow.png"></p>
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Modelagem de Dados
 
-### Premium Partners
+As três entidades relacionais definidas são Carteira (Wallet), Usuário (User) e Transação (Transaction). Usuário e carteira apresentam uma relação de 1:1 e usuário/transação apresentam uma relação de 1:N. Quando um novo registro de usuário é gerado via seeder, uma carteira é associada a esse usuário, carregando como chave estrangeira a user_id.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-- **[Romega Software](https://romegasoftware.com)**
+<p align="center"><img width="80%" src="https://raw.githubusercontent.com/4ngelica/payments-api/master/public/docs/Flow.PNG"></p>
 
-## Contributing
+## :pushpin: Instalação
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## :pushpin: Escolha da stack
 
-## Code of Conduct
+Foi utilizado o framework Laravel por ter uma vasta gama de funcionalidades built-in para APIS. Ele também deixa o projeto organizado em relação ao MVC e trás recursos para tratamento de excessões.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Também seria interessante utilizar o Lumen (um micro framework do Laravel), visto que deixaria o projeto mais enxuto, trazendo apenas as dependências necessárias para a criação da API.
 
-## Security Vulnerabilities
+Como desafio, foi utilizado o Docker. Foram criados os serviços php, db e nginx para rodar a aplicação isoladamente.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## :pushpin: Possíveis melhorias
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## :pushpin: Referências
+- [Laravel 8](https://laravel.com/docs/8.x)
+- [L5-Swagger](https://github.com/DarkaOnLine/L5-Swagger/wiki)
+- [Swagger](https://swagger.io/docs/)
+- [EspecializaTI](https://github.com/especializati/setup-docker-laravel)
+- [Docker](https://docs.docker.com/)
