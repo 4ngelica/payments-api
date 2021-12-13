@@ -85,12 +85,12 @@ class TransactionController extends Controller
                 }
             }
             return response()->json(
-                ['error' => 'This user does not have enough ballance to make this transaction'],
+                ['error' => 'Unable to process payment: Low card balance'],
                 JsonResponse::HTTP_UNPROCESSABLE_ENTITY
             );
         }
         return response()->json(
-            ['error' => 'This user cannot make transactions'],
+            ['error' => 'This type of user cannot make transactions'],
             JsonResponse::HTTP_UNPROCESSABLE_ENTITY
         );
     }
