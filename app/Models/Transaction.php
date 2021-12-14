@@ -147,4 +147,15 @@ class Transaction extends Model
         $pendingTransaction->setAttribute( 'status', 'canceled')->save();
         return false;
     }
+
+    /**
+    * Get the model with de payee user
+    *
+    * @return Model
+    */
+    public function getPayeeUser($payeeId) : Model
+    {
+        $payeeUser = User::where('id', $payeeId)->first();
+        return $payeeUser;
+    }
 }
