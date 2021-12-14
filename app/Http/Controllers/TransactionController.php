@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Events\TransactionReceived;
 use Exception;
 
 class TransactionController extends Controller
@@ -77,10 +78,11 @@ class TransactionController extends Controller
             $pendingTransaction = $this->transaction
                 ->create($pendingTransaction);
 
-            if( $this->transaction->authorizeBalance($payerId, $value) ) {
+            if( $this->transaction->authorizeBalance($payerId, $value, $pendingTransaction) ) {
                 $this->transaction->beginTransaction($payerId, $payeeId, $value);
 
                 if( $this->transaction->authorizeExternalService($pendingTransaction) ) {
+                    event(new TransactionReceived($this->transaction->getPayeeUser($payeeId)));
                     return response()->json(
                         ['ok' => 'Successful operation'],
                         JsonResponse::HTTP_OK
