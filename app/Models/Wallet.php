@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\belongsTo;
 use Auth;
 
 
@@ -16,7 +17,13 @@ class Wallet extends Model
       'balance'
     ];
 
-    public function user() {
+    /**
+    * Set the wallet/user relationship
+    *
+    * @return Illuminate\Database\Eloquent\Relations\belongsTo
+    */
+    public function user() : belongsTo
+    {
         return $this->belongsTo('App\Models\User');
     }
 }
