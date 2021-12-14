@@ -37,7 +37,7 @@ As três entidades relacionais definidas são Carteira (Wallet), Usuário (User)
 
 ## :pushpin: Instalação
 
-Se você deseja reproduzir esse projeto, siga esses passos:
+Se você deseja reproduzir esse projeto, é necessário ter o PHP e composer instalados em sua máquina. Siga esses passos:
 
 Faça o download dos arquivos ou o clone desse repositório: <br>
 
