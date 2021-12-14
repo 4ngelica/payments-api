@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "http://payments-api-challenge.herokuapp.com/"
+            "url": "https://payments-api-challenge.herokuapp.com/api/"
         }
     ],
     "paths": {
